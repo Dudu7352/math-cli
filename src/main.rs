@@ -28,10 +28,17 @@ fn repl() {
         }
         let source = buffer.chars().collect();
         let scanner = TokenScanner::new(source);
-        let mut parser = ExpressionParser::new(scanner.scan_tokens());
+        let tokens = match scanner.scan_tokens() {
+            Ok(tokens) => tokens,
+            Err(error) => {
+                println!("Error while scanning the input: {:?}", error);
+                continue;
+            }
+        };
+        let mut parser = ExpressionParser::new(tokens);
         match parser.parse() {
-            Ok(val) => println!("Result: {:?}", val),
-            Err(err) => println!("Error encountered while parsing: {:?}", err),
+            Ok(result) => println!("Result: {:?}", result),
+            Err(error) => println!("Error encountered while parsing: {:?}", error),
         }
     }
 }

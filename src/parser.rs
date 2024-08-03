@@ -35,9 +35,8 @@ impl ExpressionParser {
                 ParseResult::NoTokens => break,
             }
         }
-        match self.empty_operation_stack() {
-            Some(error) => return Err(error),
-            None => {}
+        if let Some(error) = self.empty_operation_stack() {
+            return Err(error);
         }
         let result = self.numbers.pop_back().unwrap();
         if !self.numbers.is_empty() {
@@ -48,8 +47,7 @@ impl ExpressionParser {
 
     fn empty_operation_stack(&mut self) -> Option<ParseError> {
         while !self.operators.is_empty() {
-            let result = self.perform_operation();
-            if let ParseResult::Error(err) = result {
+            if let ParseResult::Error(err) = self.perform_operation() {
                 return Some(err);
             }
         }

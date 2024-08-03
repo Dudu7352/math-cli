@@ -28,19 +28,16 @@ impl<'a> TokenScanner {
         }
     }
 
-    pub fn scan_tokens(mut self) -> LinkedList<Token> {
+    pub fn scan_tokens(mut self) -> Result<LinkedList<Token>, TokenScanError> {
         loop {
             match self.scan_token() {
                 TokenScanResult::Token(token) => self.tokens.push_back(token),
                 TokenScanResult::Whitespace => continue,
                 TokenScanResult::EmptySource => break,
-                TokenScanResult::Error(err) => {
-                    println!("ERROR: {:?}", err);
-                    panic!();
-                }
+                TokenScanResult::Error(error) => return Err(error),
             }
         }
-        return self.tokens;
+        return Ok(self.tokens);
     }
 
     fn scan_token(&mut self) -> TokenScanResult {
@@ -52,13 +49,10 @@ impl<'a> TokenScanner {
                 '*' => self.consume_and_return_token(Token::Op(Operator::Star)),
                 '(' => self.consume_and_return_token(Token::Op(Operator::LParen)),
                 ')' => self.consume_and_return_token(Token::Op(Operator::RParen)),
-                '0'..='9' => {
-                    let num_token = self.try_consume_number();
-                    match num_token {
-                        Ok(token) => TokenScanResult::Token(token),
-                        Err(err) => TokenScanResult::Error(err),
-                    }
-                }
+                '0'..='9' => match self.try_consume_number() {
+                    Ok(token) => TokenScanResult::Token(token),
+                    Err(err) => TokenScanResult::Error(err),
+                },
                 _ => {
                     if chr.is_whitespace() {
                         self.consume();
