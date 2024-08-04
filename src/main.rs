@@ -23,7 +23,7 @@ fn repl() {
             println!("Error while reading STDIN: {:?}", err);
             exit(1);
         }
-        if buffer == "exit" {
+        if buffer.trim() == "exit" {
             return;
         }
         let source = buffer.chars().collect();
