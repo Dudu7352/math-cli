@@ -47,6 +47,7 @@ impl<'a> TokenScanner {
                 '-' => self.handle_minus(),
                 '/' => self.consume_and_return_token(Token::Op(Operator::Slash)),
                 '*' => self.consume_and_return_token(Token::Op(Operator::Star)),
+                '^' => self.consume_and_return_token(Token::Op(Operator::Exponentiation)),
                 '(' => self.consume_and_return_token(Token::Op(Operator::LParen)),
                 ')' => self.consume_and_return_token(Token::Op(Operator::RParen)),
                 '0'..='9' => match self.try_consume_number() {

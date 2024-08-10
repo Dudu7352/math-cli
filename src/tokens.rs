@@ -12,6 +12,7 @@ pub enum Operator {
     Slash,
     LParen,
     RParen,
+    Exponentiation,
 }
 
 impl Operator {
@@ -23,6 +24,7 @@ impl Operator {
             Operator::Slash => 2,
             Operator::LParen => 0,
             Operator::RParen => 0,
+            Operator::Exponentiation => 3,
         }
     }
 }

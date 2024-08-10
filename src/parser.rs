@@ -128,6 +128,7 @@ impl ExpressionParser {
             Operator::Minus => first.unwrap() - second.unwrap(),
             Operator::Star => first.unwrap() * second.unwrap(),
             Operator::Slash => first.unwrap() / second.unwrap(),
+            Operator::Exponentiation => first.unwrap().powf(second.unwrap()),
             _ => return ParseResult::Error(ParseError::IncorrectOperator),
         };
         self.numbers.push_back(result);
